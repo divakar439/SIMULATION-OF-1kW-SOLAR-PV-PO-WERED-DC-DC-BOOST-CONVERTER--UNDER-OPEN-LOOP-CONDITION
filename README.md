@@ -1,16 +1,13 @@
-
-# Exp:2 SIMULATION OF 1kW SOLAR PV POWERED DC/DC BOOST CONVERTER UNDER OPEN LOOP CONDITION  
-
----
+# Exp-3-SIMULATION-OF-VOLTAGE-CONTROLLED-SOLAR-POWERED-DC-DC-CONVERTER
 
 ## Aim:
 
-To simulate solar powered DC/DC boost converter using MATLAB Simulation and obtain the I-V and P-V characteristics by changing the duty cycle.
+To simulate solar powered DC/DC boost converter using MATLAB Simulation for the output voltage control using P-I Controller.
 
 ---
 
 ## Software Tool Used:
-- MATLAB 2021 or above  
+- MATLAB 2014 or above  
 
 ---
 
@@ -23,57 +20,77 @@ To simulate solar powered DC/DC boost converter using MATLAB Simulation and obta
 | 1 | Maximum voltage | 120V |
 | 2 | Irradiance | 1000W/m2 |
 | 3 | Temperature at STC | 250C |
-| 4 | Inductor, L | 100μH |
-| 5 | Capacitor, C | 1000μF |
-| 6 | Switching frequency | 25kHz |
-| 7 | Load Resistance | 350 W |
-| 8 | Duty cycle | 10% to 80% |
+
+---
+
+### Boost Converter:
+
+| S.No | Parameters | Value |
+|------|-----------|------|
+| 1 | Inductor, L | 100µH |
+| 2 | Capacitor, C | 1000µF |
+| 3 | Switching frequency | 25kHz |
+| 4 | Load Resistance | 350 W |
+| 5 | Duty cycle | 10% to 80% |
+
+---
+
+### Controller Parameter:
+
+| S.No | Parameters | Value |
+|------|-----------|------|
+| 1 | Reference voltage | 100V to 300V |
+| 2 | P constant | 0.01 |
+| 3 | I constant | 5 |
+| 4 | Time domain | Continuous |
+| 5 | Switching frequency | 10kHz |
 
 ---
 
 ## Theory:
 
-DC-DC boost converters play a crucial role in solar power systems by efficiently increasing the voltage output of solar panels to match the requirements of the load or energy storage system. A boost converter, also known as a step-up converter, is a type of DC-DC converter that increases the output voltage level compared to the input voltage. It operates by storing energy in an inductor and then releasing it to the output at a higher voltage.  
+Closed-loop proportional-integral (PI) control is a widely used technique for regulating the output voltage in a DC-DC boost converter. It helps maintain a stable and accurate output voltage despite variations in input voltage, load current, and other operating conditions. Here's a step-by-step explanation of how closed-loop PI control works in a boost converter:  
 
-Input Voltage (Vin): The input voltage is the voltage supplied to the boost converter, typically coming from a source like a battery or a solar panel.  
+## Circuit Diagram:
+<img width="1908" height="983" alt="image" src="https://github.com/user-attachments/assets/3e9c547c-ba52-4e8e-abc1-4141254e281a" />
 
-Switch (S): The switch is a semiconductor device, often a transistor or a MOSFET, that alternately connects and disconnects the input voltage to the rest of the circuit. It operates in a switching mode, where it is either fully ON (conducting) or fully OFF (non-conducting).  
+### Components of the Control System:
 
-Inductor (L): The inductor is a coil of wire wound around a core. It stores energy in its magnetic field when the switch is ON and releases this energy to the output when the switch is OFF. The inductor plays a crucial role in boosting the voltage.  
+Boost Converter: This is the DC-DC converter responsible for increasing the output voltage.  
 
-Diode (D): A diode is connected in parallel with the load (output) and allows current to flow in one direction only. It prevents backflow of current from the output to the input when the switch is OFF.  
+Reference Voltage (Vref): This is the desired or setpoint output voltage that you want to achieve and maintain.  
 
-Output Voltage (Vout): The output voltage is the higher voltage level that you want to achieve.  
+Feedback System: The feedback system measures the actual output voltage (Vout) using a voltage sensor or divider network and provides this information to the controller.  
 
-## Circuit diagram:
- <img width="1913" height="990" alt="image" src="https://github.com/user-attachments/assets/d834502a-b036-465c-b107-dff9ef437ee3" />
+Controller (PI Controller): The controller calculates the error (the difference between the reference voltage and the measured output voltage) and generates a control signal based on this error. The PI controller has two component  
+
+---
 
 ## Tabulation:
 
-| S.No | Duty Cycle (%) | Iin (A) | Vin (V) | Pin (W) | Io (A) | Vo (V) | Po (W) |
-|------|---------------|---------|---------|---------|--------|--------|--------|
-|   1  |       50      | 2.0     |    24   |   48    |  0.5   |90      |   45   |
+## Case 1: Before Step Change
 
+| Vref (V) | Vin (V) | Iin (A) | Ppv (W) | V0 (V) | I0 (A) | P0 (W) |
+|----------|--------|--------|--------|--------|--------|--------|
+| 350 | 100 | 2.0 | 200 | 350 | 0.6 | 210 |
 
+---
 
-### ON Mode (Switch Closed):
+## Case 2: After Step Change
 
-When the switch (S) is closed (ON), current flows from the input voltage (Vin) through the inductor (L) and into the switch. As current flows through the inductor, it stores energy in its magnetic field, causing the inductor's current to increase gradually.  
+| Vref (V) | Vin (V) | Iin (A) | Ppv (W) | V0 (V) | I0 (A) | P0 (W) |
+|----------|--------|--------|--------|--------|--------|--------|
+| 230 | 165 | 1.5 | 247 | 230 | 1.0 | 230 |
 
-### Transition to OFF Mode (Switch Opening):
+---
 
-After a certain period (determined by the switching frequency), the switch is opened (turned OFF). When the switch opens, the inductor wants to maintain the current flow, and this is where the boost action occurs.  
+Proportional (P) Component: The proportional component generates a control signal proportional to the error. It helps reduce steady-state error and provides a quick response to changes in the error.  
 
-### OFF Mode (Switch Open):
+Integral (I) Component: The integral component accumulates the error over time and generates a control signal that eliminates any steady-state error. It helps in dealing with long-term deviations from the reference voltage.  
 
-With the switch open, the inductor's stored energy is released. The diode (D) provides a path for the current to flow in a loop, and it forces the current to pass through the load (output). As the inductor releases energy, it effectively adds to the input voltage, creating a higher voltage at the output (Vout).  
+By using a closed-loop PI control system, a boost converter can provide accurate and stable output voltage regulation, making it suitable for various applications, including power supplies and battery charging systems. The proportional and integral gains (Kp and Ki) need to be properly tuned to ensure good control system performance.  
 
-### Output Voltage Regulation:
-
-The duty cycle of the switch (the ratio of ON time to total switching period) is controlled by a feedback mechanism to regulate the output voltage. By adjusting the duty cycle, the boost converter can maintain a stable output voltage even when the input voltage varies or when the load changes. The boost converter's output voltage (Vout) is typically higher than the input voltage (Vin) and is determined by the duty cycle, the inductance of the inductor, and the input voltage.  
-
-In summary, a boost converter is a DC-DC converter that increases the output voltage by storing energy in an inductor during the ON state and releasing it to the output during the OFF state, thereby providing a higher output voltage level than the input voltage.  
-
+---
 
 ## Procedure:
 
@@ -83,19 +100,20 @@ In summary, a boost converter is a DC-DC converter that increases the output vol
    b. Current and voltage measurement  
    c. MOSFET, Diode, Inductor and capacitor  
    d. RLC series load  
-   e. Scope, display  
+   e. Constant, subtract, PI controller and PWM generator  
+   f. Slider, Scope, display  
 
 3. Connect the Simulink library tools as shown in the circuit diagram.  
-4. Set the parameters as per the required design.  
-5. Simulate the work for the duty cycles from 10% to 80%.  
-6. Note the input and output side parameters and tabulate it.  
-7. Plot the I-V, P-V graph for the values obtained.  
+4. Connect the slider tool with the constant block used for the reference value.  
+5. Set the parameters as per the required design.  
+6. Simulate the work for the different reference voltage by sliding the slider.  
+7. Note the input and output side parameters and tabulate it.  
 
-
-## Output Waveform:
-<img width="1907" height="897" alt="Screenshot 2026-03-18 160329" src="https://github.com/user-attachments/assets/80c1cbf5-76c9-4d37-9c5c-7afc07f68c35" />
+---
+## Output Waveform 
+ <img width="1915" height="886" alt="image" src="https://github.com/user-attachments/assets/c7a32263-04d2-4a18-9210-815a843816c9" />
 
 ## Result:
 
-Thus, the solar powered dc/dc boost converter is simulated using MATLAB and the I-V and P-V graphs are plotted for various values of duty cycles.
+Thus, the closed loop output voltage control of solar powered dc/dc boost converter using PI controller is simulated using MATLAB.
 
